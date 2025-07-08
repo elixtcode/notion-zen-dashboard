@@ -121,7 +121,7 @@ const FocusTimer = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 grid grid-cols-2 gap-4">
       {timers.map((timer, index) => (
         <div key={index} className="bg-white p-4 rounded shadow flex flex-col items-center">
           <div className="flex items-center gap-2 mb-2">
