@@ -8,25 +8,29 @@ import DailyQuote from '@/components/DailyQuote';
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl max-h-[600px] grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-4 h-[600px]">
-        {/* Focus Timer - Top Left */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <FocusTimer />
+      <div className="w-full max-w-4xl max-h-[600px] grid grid-cols-2 gap-4 h-[600px]">
+        {/* Left Column (50% width) */}
+        <div className="flex flex-col gap-4">
+          {/* World Clock - Top Half */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex-1">
+            <WorldClock />
+          </div>
+          {/* Focus Timer - Bottom Half */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex-1">
+            <FocusTimer />
+          </div>
         </div>
 
-        {/* Activity Tracker - Top Right */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <ActivityTracker />
-        </div>
-
-        {/* World Clock - Bottom Left */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <WorldClock />
-        </div>
-
-        {/* Daily Quote - Bottom Right */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <DailyQuote />
+        {/* Right Column (50% width) */}
+        <div className="flex flex-col gap-4">
+          {/* Quote of the Day - Top 25% */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" style={{ height: '25%' }}>
+            <DailyQuote />
+          </div>
+          {/* Activity Tracker - Bottom 75% */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex-1">
+            <ActivityTracker />
+          </div>
         </div>
       </div>
     </div>

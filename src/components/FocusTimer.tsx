@@ -1,29 +1,33 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Timer, Play, Pause, RotateCcw } from 'lucide-react';
-
-const workoutVideos = [
-  "https://www.youtube.com/embed/L_xrDAtykMI",
-  "https://www.youtube.com/embed/dZgVxmf6jkA",
-  "https://www.youtube.com/embed/qHJ992N-Dhs",
-  "https://www.youtube.com/embed/OAJ_J3EZkdY",
-  "https://www.youtube.com/embed/WG0vNENlV5E",
-  "https://www.youtube.com/embed/XWXe0fU5x8o",
-  "https://www.youtube.com/embed/MBjmuJhQ4Yw",
-  "https://www.youtube.com/embed/l0WOLpbf2dM",
-  "https://www.youtube.com/embed/HYcXy58xU_E",
-  "https://www.youtube.com/embed/Gpmy2P9Cg6A"
-];
+import { Timer, Play, Pause, RotateCcw, Square } from 'lucide-react';
 
 const FocusTimer = () => {
   const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
-  const [currentVideo, setCurrentVideo] = useState('');
+  const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const alarmRef = useRef<HTMLAudioElement | null>(null);
+  const alarmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    // Initialize alarm audio
+    alarmRef.current = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+    alarmRef.current.loop = true;
+    
+    return () => {
+      if (alarmRef.current) {
+        alarmRef.current.pause();
+        alarmRef.current = null;
+      }
+      if (alarmTimeoutRef.current) {
+        clearTimeout(alarmTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setTimeLeft(minutes * 60 + seconds);
@@ -37,44 +41,35 @@ const FocusTimer = () => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
     } else if (timeLeft === 0 && isRunning) {
-      playAlarm();
-      showRandomVideo();
+      startAlarm();
       setIsRunning(false);
     }
 
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
 
-  const playAlarm = () => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    
-    oscillator.start();
-    setTimeout(() => oscillator.stop(), 200);
-    
-    setTimeout(() => {
-      const osc2 = audioContext.createOscillator();
-      const gain2 = audioContext.createGain();
-      osc2.connect(gain2);
-      gain2.connect(audioContext.destination);
-      osc2.frequency.setValueAtTime(600, audioContext.currentTime);
-      gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
-      osc2.start();
-      setTimeout(() => osc2.stop(), 200);
-    }, 300);
+  const startAlarm = () => {
+    if (alarmRef.current) {
+      alarmRef.current.play();
+      setIsAlarmActive(true);
+      
+      // Auto stop alarm after 60 seconds
+      alarmTimeoutRef.current = setTimeout(() => {
+        stopAlarm();
+      }, 60000);
+    }
   };
 
-  const showRandomVideo = () => {
-    const randomVideo = workoutVideos[Math.floor(Math.random() * workoutVideos.length)];
-    setCurrentVideo(randomVideo);
-    setShowVideo(true);
+  const stopAlarm = () => {
+    if (alarmRef.current) {
+      alarmRef.current.pause();
+      alarmRef.current.currentTime = 0;
+    }
+    setIsAlarmActive(false);
+    if (alarmTimeoutRef.current) {
+      clearTimeout(alarmTimeoutRef.current);
+      alarmTimeoutRef.current = null;
+    }
   };
 
   const toggleTimer = () => {
@@ -84,7 +79,7 @@ const FocusTimer = () => {
   const resetTimer = () => {
     setIsRunning(false);
     setTimeLeft(minutes * 60 + seconds);
-    setShowVideo(false);
+    stopAlarm();
   };
 
   const formatTime = (totalSeconds: number) => {
@@ -100,7 +95,20 @@ const FocusTimer = () => {
         <h2 className="text-sm font-semibold text-gray-800">Focus Timer</h2>
       </div>
 
-      {!showVideo ? (
+      {isAlarmActive ? (
+        <div className="flex-1 flex flex-col items-center justify-center space-y-4">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-red-600 mb-2">⏰ Time's up!</div>
+            <div className="text-sm text-gray-700 mb-4">
+              Stand up, stretch, and move around for 5 minutes.
+            </div>
+            <Button onClick={stopAlarm} variant="destructive" className="text-sm">
+              <Square className="h-3 w-3 mr-1" />
+              Stop Alarm
+            </Button>
+          </div>
+        </div>
+      ) : (
         <div className="flex-1 flex flex-col items-center justify-center space-y-4">
           <div className="text-3xl font-mono font-bold text-gray-800">
             {formatTime(timeLeft)}
@@ -136,25 +144,6 @@ const FocusTimer = () => {
             <Button onClick={resetTimer} variant="outline" size="sm" className="text-xs">
               <RotateCcw className="h-3 w-3" />
             </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="flex-1 flex flex-col">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-gray-700">5-Minute Exercise Break</span>
-            <Button onClick={() => setShowVideo(false)} variant="outline" size="sm" className="text-xs">
-              Close
-            </Button>
-          </div>
-          <div className="flex-1 relative">
-            <iframe
-              id="exercise-video"
-              src={currentVideo}
-              className="w-full h-full rounded"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
           </div>
         </div>
       )}
