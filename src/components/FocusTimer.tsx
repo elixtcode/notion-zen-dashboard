@@ -121,42 +121,42 @@ const FocusTimer = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-4 max-w-md mx-auto">
+    <div className="p-2 flex flex-col gap-2 max-w-sm mx-auto">
       {timers.map((timer, index) => (
         <div
           key={index}
-          className="bg-white p-4 rounded shadow flex flex-col items-center"
+          className="bg-white p-2 rounded shadow flex flex-col items-center"
         >
-          <div className="flex items-center gap-2 mb-2">
-            <Timer className="h-4 w-4 text-blue-600" />
-            <h2 className="text-sm font-semibold text-gray-800">
-              {index === 0 ? 'Focus Timer (25 min)' : 'Break Timer (5 min)'}
+          <div className="flex items-center gap-1 mb-1">
+            <Timer className="h-3 w-3 text-blue-600" />
+            <h2 className="text-xs font-semibold text-gray-800">
+              {index === 0 ? 'Focus (25m)' : 'Break (5m)'}
             </h2>
           </div>
 
           {timer.isAlarmActive ? (
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-600 mb-2">⏰ Time's up!</div>
-              <div className="text-sm text-gray-700 mb-4">
-                Stand up, stretch, and move around for 5 minutes.
+              <div className="text-lg font-bold text-red-600 mb-1">⏰ Time's up!</div>
+              <div className="text-xs text-gray-700 mb-2">
+                Stand up, stretch, and move!
               </div>
-              <Button onClick={() => stopAlarm(index)} variant="destructive" className="text-sm">
-                <Square className="h-3 w-3 mr-1" /> Stop Alarm
+              <Button onClick={() => stopAlarm(index)} variant="destructive" size="sm" className="text-xs px-2 h-6">
+                <Square className="h-3 w-3 mr-1" /> Stop
               </Button>
             </div>
           ) : (
             <>
-              <div className="text-3xl font-mono font-bold text-gray-800 mb-3">
+              <div className="text-2xl font-mono font-bold text-gray-800 mb-2">
                 {formatTime(timer.timeLeft)}
               </div>
 
               {!timer.isRunning && (
-                <div className="flex gap-2 text-xs mb-2">
+                <div className="flex gap-1 text-xs mb-2">
                   <Input
                     type="number"
                     value={timer.minutes}
                     onChange={(e) => updateMinutes(index, Math.max(0, parseInt(e.target.value) || 0))}
-                    className="w-16 h-8 text-xs"
+                    className="w-14 h-7 text-xs px-2"
                     min="0"
                     max="99"
                     placeholder="min"
@@ -167,7 +167,7 @@ const FocusTimer = () => {
                     onChange={(e) =>
                       updateSeconds(index, Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))
                     }
-                    className="w-16 h-8 text-xs"
+                    className="w-14 h-7 text-xs px-2"
                     min="0"
                     max="59"
                     placeholder="sec"
@@ -175,11 +175,11 @@ const FocusTimer = () => {
                 </div>
               )}
 
-              <div className="flex gap-2">
-                <Button onClick={() => toggleTimer(index)} size="sm" className="text-xs">
+              <div className="flex gap-1">
+                <Button onClick={() => toggleTimer(index)} size="sm" className="text-xs px-2 h-7">
                   {timer.isRunning ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                 </Button>
-                <Button onClick={() => resetTimer(index)} variant="outline" size="sm" className="text-xs">
+                <Button onClick={() => resetTimer(index)} variant="outline" size="sm" className="text-xs px-2 h-7">
                   <RotateCcw className="h-3 w-3" />
                 </Button>
               </div>
