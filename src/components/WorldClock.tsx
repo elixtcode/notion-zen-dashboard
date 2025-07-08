@@ -9,18 +9,31 @@ interface Clock {
 }
 
 const WORLD_CITIES = [
-  { city: 'Los Angeles', timezone: 'America/Los_Angeles', gmt: 'GMT-8' },
-  { city: 'New York', timezone: 'America/New_York', gmt: 'GMT-5' },
+  { city: 'Baker Island', timezone: 'Etc/GMT+12', gmt: 'GMT-12' },
+  { city: 'Honolulu', timezone: 'Pacific/Honolulu', gmt: 'GMT-10 (HST)' },
+  { city: 'Anchorage', timezone: 'America/Anchorage', gmt: 'GMT-9 (AKST)' },
+  { city: 'Los Angeles', timezone: 'America/Los_Angeles', gmt: 'GMT-8 (PST)' },
+  { city: 'Denver', timezone: 'America/Denver', gmt: 'GMT-7 (MST)' },
+  { city: 'Chicago', timezone: 'America/Chicago', gmt: 'GMT-6 (CST)' },
+  { city: 'New York', timezone: 'America/New_York', gmt: 'GMT-5 (EST)' },
+  { city: 'Caracas', timezone: 'America/Caracas', gmt: 'GMT-4' },
+  { city: 'Buenos Aires', timezone: 'America/Argentina/Buenos_Aires', gmt: 'GMT-3' },
+  { city: 'South Georgia', timezone: 'Atlantic/South_Georgia', gmt: 'GMT-2' },
+  { city: 'Azores', timezone: 'Atlantic/Azores', gmt: 'GMT-1' },
   { city: 'London', timezone: 'Europe/London', gmt: 'GMT+0' },
   { city: 'Berlin', timezone: 'Europe/Berlin', gmt: 'GMT+1' },
-  { city: 'Paris', timezone: 'Europe/Paris', gmt: 'GMT+1' },
+  { city: 'Cairo', timezone: 'Africa/Cairo', gmt: 'GMT+2' },
   { city: 'Moscow', timezone: 'Europe/Moscow', gmt: 'GMT+3' },
   { city: 'Dubai', timezone: 'Asia/Dubai', gmt: 'GMT+4' },
+  { city: 'Karachi', timezone: 'Asia/Karachi', gmt: 'GMT+5' },
+  { city: 'Dhaka', timezone: 'Asia/Dhaka', gmt: 'GMT+6' },
+  { city: 'Bangkok', timezone: 'Asia/Bangkok', gmt: 'GMT+7' },
   { city: 'Singapore', timezone: 'Asia/Singapore', gmt: 'GMT+8' },
   { city: 'Manila', timezone: 'Asia/Manila', gmt: 'GMT+8' },
-  { city: 'Beijing', timezone: 'Asia/Shanghai', gmt: 'GMT+8' },
   { city: 'Tokyo', timezone: 'Asia/Tokyo', gmt: 'GMT+9' },
-  { city: 'Sydney', timezone: 'Australia/Sydney', gmt: 'GMT+11' },
+  { city: 'Sydney', timezone: 'Australia/Sydney', gmt: 'GMT+10' },
+  { city: 'Noumea', timezone: 'Pacific/Noumea', gmt: 'GMT+11' },
+  { city: 'Auckland', timezone: 'Pacific/Auckland', gmt: 'GMT+12' }
 ];
 
 const WorldClock = () => {
@@ -98,7 +111,7 @@ const WorldClock = () => {
                 </SelectContent>
               </Select>
               <div className="text-center">
-                <div className="text-sm font-mono font-bold text-gray-800">{time} <span className="text-xs text-gray-500">({cityInfo.gmt})</span></div>
+                <div className="text-sm font-mono font-bold text-gray-800">{time}</div>
               </div>
             </div>
           );
