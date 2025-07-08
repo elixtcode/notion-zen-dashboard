@@ -1,85 +1,117 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Timer, Play, Pause, RotateCcw, Square } from 'lucide-react';
 
+const createTimer = (initialMinutes: number) => ({
+  minutes: initialMinutes,
+  seconds: 0,
+  timeLeft: initialMinutes * 60,
+  isRunning: false,
+  isAlarmActive: false,
+});
+
 const FocusTimer = () => {
-  const [minutes, setMinutes] = useState(25);
-  const [seconds, setSeconds] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(false);
-  const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const [timers, setTimers] = useState([
+    createTimer(25),
+    createTimer(5),
+  ]);
   const alarmRef = useRef<HTMLAudioElement | null>(null);
   const alarmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Initialize alarm audio
     alarmRef.current = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
     alarmRef.current.loop = true;
-    
+
     return () => {
-      if (alarmRef.current) {
-        alarmRef.current.pause();
-        alarmRef.current = null;
-      }
-      if (alarmTimeoutRef.current) {
-        clearTimeout(alarmTimeoutRef.current);
-      }
+      if (alarmRef.current) alarmRef.current.pause();
+      if (alarmTimeoutRef.current) clearTimeout(alarmTimeoutRef.current);
     };
   }, []);
 
   useEffect(() => {
-    setTimeLeft(minutes * 60 + seconds);
-  }, [minutes, seconds]);
+    const intervals = timers.map((timer, index) => {
+      if (timer.isRunning && timer.timeLeft > 0) {
+        return setInterval(() => {
+          setTimers((prev) => {
+            const newTimers = [...prev];
+            newTimers[index] = {
+              ...newTimers[index],
+              timeLeft: newTimers[index].timeLeft - 1,
+            };
+            return newTimers;
+          });
+        }, 1000);
+      } else if (timer.timeLeft === 0 && timer.isRunning) {
+        startAlarm(index);
+      }
+      return null;
+    });
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
+    return () => intervals.forEach((i) => i && clearInterval(i));
+  }, [timers]);
 
-    if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0 && isRunning) {
-      startAlarm();
-      setIsRunning(false);
-    }
-
-    return () => clearInterval(interval);
-  }, [isRunning, timeLeft]);
-
-  const startAlarm = () => {
+  const startAlarm = (index: number) => {
     if (alarmRef.current) {
       alarmRef.current.play();
-      setIsAlarmActive(true);
-      
-      // Auto stop alarm after 60 seconds
-      alarmTimeoutRef.current = setTimeout(() => {
-        stopAlarm();
-      }, 60000);
+      setTimers((prev) => {
+        const newTimers = [...prev];
+        newTimers[index].isAlarmActive = true;
+        newTimers[index].isRunning = false;
+        return newTimers;
+      });
+      alarmTimeoutRef.current = setTimeout(() => stopAlarm(index), 60000);
     }
   };
 
-  const stopAlarm = () => {
+  const stopAlarm = (index: number) => {
     if (alarmRef.current) {
       alarmRef.current.pause();
       alarmRef.current.currentTime = 0;
     }
-    setIsAlarmActive(false);
-    if (alarmTimeoutRef.current) {
-      clearTimeout(alarmTimeoutRef.current);
-      alarmTimeoutRef.current = null;
-    }
+    setTimers((prev) => {
+      const newTimers = [...prev];
+      newTimers[index].isAlarmActive = false;
+      return newTimers;
+    });
+    if (alarmTimeoutRef.current) clearTimeout(alarmTimeoutRef.current);
   };
 
-  const toggleTimer = () => {
-    setIsRunning(!isRunning);
+  const toggleTimer = (index: number) => {
+    setTimers((prev) => {
+      const newTimers = [...prev];
+      newTimers[index].isRunning = !newTimers[index].isRunning;
+      return newTimers;
+    });
   };
 
-  const resetTimer = () => {
-    setIsRunning(false);
-    setTimeLeft(minutes * 60 + seconds);
-    stopAlarm();
+  const resetTimer = (index: number) => {
+    setTimers((prev) => {
+      const newTimers = [...prev];
+      newTimers[index].isRunning = false;
+      newTimers[index].timeLeft = newTimers[index].minutes * 60 + newTimers[index].seconds;
+      newTimers[index].isAlarmActive = false;
+      return newTimers;
+    });
+    if (alarmRef.current) alarmRef.current.pause();
+  };
+
+  const updateMinutes = (index: number, value: number) => {
+    setTimers((prev) => {
+      const newTimers = [...prev];
+      newTimers[index].minutes = value;
+      newTimers[index].timeLeft = value * 60 + newTimers[index].seconds;
+      return newTimers;
+    });
+  };
+
+  const updateSeconds = (index: number, value: number) => {
+    setTimers((prev) => {
+      const newTimers = [...prev];
+      newTimers[index].seconds = value;
+      newTimers[index].timeLeft = newTimers[index].minutes * 60 + value;
+      return newTimers;
+    });
   };
 
   const formatTime = (totalSeconds: number) => {
@@ -89,64 +121,67 @@ const FocusTimer = () => {
   };
 
   return (
-    <div className="p-4 h-full flex flex-col">
-      <div className="flex items-center gap-2 mb-4">
-        <Timer className="h-4 w-4 text-blue-600" />
-        <h2 className="text-sm font-semibold text-gray-800">Focus Timer</h2>
-      </div>
-
-      {isAlarmActive ? (
-        <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-red-600 mb-2">⏰ Time's up!</div>
-            <div className="text-sm text-gray-700 mb-4">
-              Stand up, stretch, and move around for 5 minutes.
-            </div>
-            <Button onClick={stopAlarm} variant="destructive" className="text-sm">
-              <Square className="h-3 w-3 mr-1" />
-              Stop Alarm
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-          <div className="text-3xl font-mono font-bold text-gray-800">
-            {formatTime(timeLeft)}
+    <div className="p-4 space-y-6">
+      {timers.map((timer, index) => (
+        <div key={index} className="bg-white p-4 rounded shadow flex flex-col items-center">
+          <div className="flex items-center gap-2 mb-2">
+            <Timer className="h-4 w-4 text-blue-600" />
+            <h2 className="text-sm font-semibold text-gray-800">
+              {index === 0 ? 'Focus Timer (25 min)' : 'Break Timer (5 min)'}
+            </h2>
           </div>
 
-          {!isRunning && (
-            <div className="flex gap-2 text-xs">
-              <Input
-                type="number"
-                value={minutes}
-                onChange={(e) => setMinutes(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-16 h-8 text-xs"
-                min="0"
-                max="99"
-                placeholder="min"
-              />
-              <Input
-                type="number"
-                value={seconds}
-                onChange={(e) => setSeconds(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
-                className="w-16 h-8 text-xs"
-                min="0"
-                max="59"
-                placeholder="sec"
-              />
+          {timer.isAlarmActive ? (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-600 mb-2">⏰ Time's up!</div>
+              <div className="text-sm text-gray-700 mb-4">
+                Stand up, stretch, and move around for 5 minutes.
+              </div>
+              <Button onClick={() => stopAlarm(index)} variant="destructive" className="text-sm">
+                <Square className="h-3 w-3 mr-1" /> Stop Alarm
+              </Button>
             </div>
+          ) : (
+            <>
+              <div className="text-3xl font-mono font-bold text-gray-800 mb-3">
+                {formatTime(timer.timeLeft)}
+              </div>
+
+              {!timer.isRunning && (
+                <div className="flex gap-2 text-xs mb-2">
+                  <Input
+                    type="number"
+                    value={timer.minutes}
+                    onChange={(e) => updateMinutes(index, Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-16 h-8 text-xs"
+                    min="0"
+                    max="99"
+                    placeholder="min"
+                  />
+                  <Input
+                    type="number"
+                    value={timer.seconds}
+                    onChange={(e) => updateSeconds(index, Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
+                    className="w-16 h-8 text-xs"
+                    min="0"
+                    max="59"
+                    placeholder="sec"
+                  />
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Button onClick={() => toggleTimer(index)} size="sm" className="text-xs">
+                  {timer.isRunning ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                </Button>
+                <Button onClick={() => resetTimer(index)} variant="outline" size="sm" className="text-xs">
+                  <RotateCcw className="h-3 w-3" />
+                </Button>
+              </div>
+            </>
           )}
-
-          <div className="flex gap-2">
-            <Button onClick={toggleTimer} size="sm" className="text-xs">
-              {isRunning ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-            </Button>
-            <Button onClick={resetTimer} variant="outline" size="sm" className="text-xs">
-              <RotateCcw className="h-3 w-3" />
-            </Button>
-          </div>
         </div>
-      )}
+      ))}
     </div>
   );
 };
