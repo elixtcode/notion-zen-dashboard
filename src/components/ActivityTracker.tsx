@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Clock, Play, Square } from 'lucide-react';
+import { Clock, Play, Square, Edit2, Check, X } from 'lucide-react';
 
 interface Activity {
   id: string;
@@ -12,10 +12,17 @@ interface Activity {
   duration: number;
 }
 
+interface EditingState {
+  id: string;
+  field: 'name' | 'duration';
+  value: string;
+}
+
 const ActivityTracker = () => {
   const [activityName, setActivityName] = useState('');
   const [currentActivity, setCurrentActivity] = useState<Activity | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [editing, setEditing] = useState<EditingState | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem('activities');
@@ -68,16 +75,57 @@ const ActivityTracker = () => {
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
     
-    if (h > 0) {
-      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    } else {
-      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    }
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const parseDuration = (timeString: string): number => {
+    const parts = timeString.split(':');
+    if (parts.length !== 3) return 0;
+    
+    const hours = parseInt(parts[0]) || 0;
+    const minutes = parseInt(parts[1]) || 0;
+    const seconds = parseInt(parts[2]) || 0;
+    
+    return hours * 3600 + minutes * 60 + seconds;
   };
 
   const getTotalTime = () => {
     const totalSeconds = activities.reduce((sum, activity) => sum + activity.duration, 0);
     return formatDuration(totalSeconds);
+  };
+
+  const startEditing = (id: string, field: 'name' | 'duration', currentValue: string) => {
+    setEditing({ id, field, value: currentValue });
+  };
+
+  const cancelEditing = () => {
+    setEditing(null);
+  };
+
+  const saveEdit = () => {
+    if (!editing) return;
+    
+    setActivities(prev => prev.map(activity => {
+      if (activity.id === editing.id) {
+        if (editing.field === 'name') {
+          return { ...activity, name: editing.value.trim() || activity.name };
+        } else if (editing.field === 'duration') {
+          const newDuration = parseDuration(editing.value);
+          return { ...activity, duration: newDuration > 0 ? newDuration : activity.duration };
+        }
+      }
+      return activity;
+    }));
+    
+    setEditing(null);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      saveEdit();
+    } else if (e.key === 'Escape') {
+      cancelEditing();
+    }
   };
 
   return (
@@ -150,8 +198,82 @@ const ActivityTracker = () => {
               {/* Table Rows */}
               {activities.slice(0, 8).map((activity) => (
                 <div key={activity.id} className="grid grid-cols-2 gap-2 text-xs py-1 border-b border-gray-100">
-                  <div className="font-medium text-gray-800 truncate">{activity.name}</div>
-                  <div className="text-right text-gray-600 font-mono">{formatDuration(activity.duration)}</div>
+                  {/* Activity Name */}
+                  <div className="flex items-center">
+                    {editing?.id === activity.id && editing.field === 'name' ? (
+                      <div className="flex items-center gap-1 flex-1">
+                        <Input
+                          value={editing.value}
+                          onChange={(e) => setEditing({ ...editing, value: e.target.value })}
+                          onKeyDown={handleKeyPress}
+                          className="text-xs h-6 px-1"
+                          autoFocus
+                        />
+                        <Button
+                          onClick={saveEdit}
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                        >
+                          <Check className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          onClick={cancelEditing}
+                          size="sm"
+                          variant="outline"
+                          className="h-6 w-6 p-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div 
+                        className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded flex-1"
+                        onClick={() => startEditing(activity.id, 'name', activity.name)}
+                      >
+                        <span className="font-medium text-gray-800 truncate">{activity.name}</span>
+                        <Edit2 className="h-3 w-3 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Duration */}
+                  <div className="flex items-center justify-end">
+                    {editing?.id === activity.id && editing.field === 'duration' ? (
+                      <div className="flex items-center gap-1">
+                        <Input
+                          value={editing.value}
+                          onChange={(e) => setEditing({ ...editing, value: e.target.value })}
+                          onKeyDown={handleKeyPress}
+                          className="text-xs h-6 px-1 w-20 text-right font-mono"
+                          placeholder="HH:MM:SS"
+                          autoFocus
+                        />
+                        <Button
+                          onClick={saveEdit}
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                        >
+                          <Check className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          onClick={cancelEditing}
+                          size="sm"
+                          variant="outline"
+                          className="h-6 w-6 p-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div 
+                        className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                        onClick={() => startEditing(activity.id, 'duration', formatDuration(activity.duration))}
+                      >
+                        <span className="text-gray-600 font-mono">{formatDuration(activity.duration)}</span>
+                        <Edit2 className="h-3 w-3 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
