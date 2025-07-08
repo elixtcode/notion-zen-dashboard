@@ -65,13 +65,13 @@ const WorldClock = () => {
   };
 
   return (
-    <div className="p-4 h-full flex flex-col">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="p-3 h-full flex flex-col">
+      <div className="flex items-center gap-2 mb-3">
         <Globe className="h-4 w-4 text-purple-600" />
         <h2 className="text-sm font-semibold text-gray-800">World Clock</h2>
       </div>
 
-      <div className="flex flex-col gap-3 h-full justify-start">
+      <div className="flex flex-col gap-2 h-full justify-start">
         {clocks.map((clock) => {
           const cityInfo = getCityInfo(clock.city);
           const time = formatTime(currentTime, clock.timezone);
@@ -79,14 +79,14 @@ const WorldClock = () => {
           return (
             <div
               key={clock.id}
-              className="bg-gradient-to-r from-blue-50 to-purple-50 rounded border p-3 flex flex-col justify-center"
-              style={{ minHeight: '80px' }}
+              className="bg-gradient-to-r from-blue-50 to-purple-50 rounded border p-2 flex flex-col justify-center"
+              style={{ minHeight: '68px' }}
             >
               <Select
                 value={clock.city}
                 onValueChange={(value) => handleCityChange(clock.id, value)}
               >
-                <SelectTrigger className="w-full mb-2 border rounded text-xs font-medium text-gray-700">
+                <SelectTrigger className="w-full mb-1 border rounded text-xs font-medium text-gray-700">
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
                 <SelectContent>
@@ -98,7 +98,7 @@ const WorldClock = () => {
                 </SelectContent>
               </Select>
               <div className="text-center">
-                <div className="text-base font-mono font-bold text-gray-800">{time}</div>
+                <div className="text-sm font-mono font-bold text-gray-800">{time}</div>
                 <div className="text-xs text-gray-500">{cityInfo.utc}</div>
               </div>
             </div>
