@@ -23,6 +23,7 @@ const ActivityTracker = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [editing, setEditing] = useState<EditingState | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem('activities');
@@ -83,10 +84,13 @@ const ActivityTracker = () => {
     setCurrentActivity(null);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this activity?')) {
-      setActivities((prev) => prev.filter((activity) => activity.id !== id));
-    }
+  const handleDeleteConfirm = (id: string) => {
+    setActivities((prev) => prev.filter((activity) => activity.id !== id));
+    setDeletingId(null);
+  };
+
+  const cancelDelete = () => {
+    setDeletingId(null);
   };
 
   const formatDuration = (seconds: number) => {
@@ -301,10 +305,19 @@ const ActivityTracker = () => {
                           <X className="h-3 w-3" />
                         </Button>
                       </>
+                    ) : deletingId === activity.id ? (
+                      <>
+                        <Button size="icon" onClick={() => handleDeleteConfirm(activity.id)} className="h-6 w-6 bg-green-100">
+                          <Check className="h-3 w-3 text-green-700" />
+                        </Button>
+                        <Button size="icon" onClick={cancelDelete} className="h-6 w-6 bg-gray-100" variant="secondary">
+                          <X className="h-3 w-3 text-gray-700" />
+                        </Button>
+                      </>
                     ) : (
                       <Button
                         size="icon"
-                        onClick={() => handleDelete(activity.id)}
+                        onClick={() => setDeletingId(activity.id)}
                         className="h-6 w-6"
                         variant="ghost"
                       >
