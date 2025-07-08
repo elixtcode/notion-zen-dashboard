@@ -130,17 +130,17 @@ const FocusTimer = () => {
           >
             <div className="flex items-center gap-2 mb-1">
               <Timer className="h-4 w-4 text-blue-600" />
-              <h2 className="text-sm font-semibold text-gray-800">
+              <h2 className="text-xs md:text-sm font-semibold text-gray-800 text-center">
                 {index === 0 ? 'Focus Timer (25 min)' : 'Break Timer (5 min)'}
               </h2>
             </div>
 
             {timer.isAlarmActive ? (
               <div className="text-center">
-                <div className="text-lg font-bold text-red-600 mb-1">
+                <div className="text-base md:text-lg font-bold text-red-600 mb-1">
                   {index === 0 ? "⏰ Time's up!" : "⏰ Break's over!"}
                 </div>
-                <div className="text-xs text-gray-700 mb-2">
+                <div className="text-xs md:text-sm text-gray-700 mb-2">
                   {index === 0
                     ? "Stand up, stretch, and move!"
                     : "Go back to work/hustle."}
@@ -156,7 +156,7 @@ const FocusTimer = () => {
               </div>
             ) : (
               <>
-                <div className="text-3xl font-mono font-bold text-gray-800 mb-2">
+                <div className="text-2xl md:text-3xl font-mono font-bold text-gray-800 mb-2">
                   {formatTime(timer.timeLeft)}
                 </div>
 
@@ -171,7 +171,7 @@ const FocusTimer = () => {
                           Math.max(0, parseInt(e.target.value) || 0)
                         )
                       }
-                      className="w-16 h-8 text-xs"
+                      className="w-14 md:w-16 h-8 text-xs"
                       min="0"
                       max="99"
                       placeholder="min"
@@ -188,7 +188,7 @@ const FocusTimer = () => {
                           )
                         )
                       }
-                      className="w-16 h-8 text-xs"
+                      className="w-14 md:w-16 h-8 text-xs"
                       min="0"
                       max="59"
                       placeholder="sec"
