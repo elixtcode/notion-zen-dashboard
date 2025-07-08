@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Clock, Play, Square, Edit2, Check, X } from 'lucide-react';
+import { Clock, Play, Square, Edit2, Check, X, Trash2 } from 'lucide-react';
 
 interface Activity {
   id: string;
@@ -177,8 +177,7 @@ const ActivityTracker = () => {
           <Button
             onClick={startActivity}
             disabled={!activityName.trim() || !!currentActivity}
-            className="flex-1 text-xs h-10 sm:h-8"
-            size="sm"
+            className="w-full sm:flex-1 text-xs min-h-[44px]"
           >
             <Play className="h-4 w-4 mr-1" />
             Start
@@ -188,8 +187,7 @@ const ActivityTracker = () => {
             onClick={stopActivity}
             disabled={!currentActivity}
             variant="destructive"
-            className="flex-1 text-xs h-10 sm:h-8"
-            size="sm"
+            className="w-full sm:flex-1 text-xs min-h-[44px]"
           >
             <Square className="h-4 w-4 mr-1" />
             Stop
@@ -226,7 +224,95 @@ const ActivityTracker = () => {
           ) : (
             <div className="space-y-1">
               {activities.map((activity) => (
-                // ... rest of activity rendering code remains unchanged
+                <div
+                  key={activity.id}
+                  className="bg-white p-2 rounded shadow-sm text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 flex-1">
+                    <div className="font-medium text-gray-800">
+                      {editing?.id === activity.id && editing.field === 'name' ? (
+                        <Input
+                          value={editing.value}
+                          onChange={(e) =>
+                            setEditing((prev) =>
+                              prev ? { ...prev, value: e.target.value } : null
+                            )
+                          }
+                          onKeyDown={handleKeyPress}
+                          className="text-xs h-7"
+                          autoFocus
+                        />
+                      ) : (
+                        <span
+                          onClick={() =>
+                            startEditing(activity.id, 'name', activity.name)
+                          }
+                          className="cursor-pointer hover:underline"
+                        >
+                          {activity.name}
+                        </span>
+                      )}
+                    </div>
+                    <div className="font-mono text-gray-600">
+                      {editing?.id === activity.id && editing.field === 'duration' ? (
+                        <Input
+                          value={editing.value}
+                          onChange={(e) =>
+                            setEditing((prev) =>
+                              prev ? { ...prev, value: e.target.value } : null
+                            )
+                          }
+                          onKeyDown={handleKeyPress}
+                          className="text-xs h-7"
+                          autoFocus
+                        />
+                      ) : (
+                        <span
+                          onClick={() =>
+                            startEditing(
+                              activity.id,
+                              'duration',
+                              formatDuration(activity.duration)
+                            )
+                          }
+                          className="cursor-pointer hover:underline"
+                        >
+                          {formatDuration(activity.duration)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex gap-1">
+                    {editing?.id === activity.id ? (
+                      <>
+                        <Button
+                          size="icon"
+                          onClick={saveEdit}
+                          className="h-6 w-6"
+                        >
+                          <Check className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          onClick={cancelEditing}
+                          className="h-6 w-6"
+                          variant="secondary"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        size="icon"
+                        onClick={() => handleDelete(activity.id)}
+                        className="h-6 w-6"
+                        variant="ghost"
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           )}
