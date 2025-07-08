@@ -147,18 +147,18 @@ const DailyQuote = () => {
   }, []);
 
   return (
-    <div className="p-4 sm:p-6 h-full flex flex-col items-center justify-center max-w-md mx-auto">
+    <div className="w-full max-w-md px-4 py-6 mx-auto">
       <div className="flex items-center gap-2 mb-3">
-        <Quote className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-        <h2 className="text-sm sm:text-base font-semibold text-gray-800">Quote of the Day</h2>
+        <Quote className="h-4 w-4 text-blue-600 shrink-0" />
+        <h2 className="text-sm font-semibold text-gray-800">Quote of the Day</h2>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center text-center">
-        <blockquote className="text-xs sm:text-sm text-gray-700 italic leading-relaxed px-2 sm:px-4">
-          "{quote}"
+      <div className="text-center">
+        <blockquote className="text-sm sm:text-base text-gray-700 italic leading-relaxed break-words">
+          “{quote}”
         </blockquote>
 
-        <div className="mt-3 text-xs sm:text-sm text-gray-500">
+        <div className="mt-3 text-xs text-gray-500">
           {new Date().toLocaleDateString('en-US', {
             weekday: 'short',
             month: 'short',
