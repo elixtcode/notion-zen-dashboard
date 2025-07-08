@@ -1,42 +1,32 @@
 
-import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import PomodoroTimer from '@/components/PomodoroTimer';
-import TimeLogger from '@/components/TimeLogger';
-import TimezoneDisplay from '@/components/TimezoneDisplay';
+import React from 'react';
+import FocusTimer from '@/components/FocusTimer';
+import ActivityTracker from '@/components/ActivityTracker';
+import WorldClock from '@/components/WorldClock';
 import DailyQuote from '@/components/DailyQuote';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-gray-800 mb-2">Productivity Dashboard</h1>
-          <p className="text-gray-600 text-sm">Focus • Track • Motivate</p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl max-h-[600px] grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-4 h-[600px]">
+        {/* Focus Timer - Top Left */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <FocusTimer />
         </div>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Timer Section */}
-          <div className="lg:col-span-2">
-            <PomodoroTimer />
-          </div>
+        {/* Activity Tracker - Top Right */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <ActivityTracker />
+        </div>
 
-          {/* Time Logger */}
-          <div>
-            <TimeLogger />
-          </div>
+        {/* World Clock - Bottom Left */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <WorldClock />
+        </div>
 
-          {/* Timezone Display */}
-          <div>
-            <TimezoneDisplay />
-          </div>
-
-          {/* Daily Quote */}
-          <div className="lg:col-span-2">
-            <DailyQuote />
-          </div>
+        {/* Daily Quote - Bottom Right */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <DailyQuote />
         </div>
       </div>
     </div>

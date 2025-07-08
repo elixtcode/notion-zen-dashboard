@@ -1,9 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
 import { Quote } from 'lucide-react';
 
 const motivationalQuotes = [
+  "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
+  "Don't watch the clock; do what it does. Keep going. – Sam Levenson",
+  "The way to get started is to quit talking and begin doing. – Walt Disney",
+  "It does not matter how slowly you go as long as you do not stop. – Confucius",
+  "Hardships often prepare ordinary people for an extraordinary destiny. – C.S. Lewis",
+  "Believe you can and you're halfway there. – Theodore Roosevelt",
+  "Action is the foundational key to all success. – Pablo Picasso",
+  "Success usually comes to those who are too busy to be looking for it. – Henry David Thoreau",
+  "Everything you've ever wanted is on the other side of fear. – George Addair",
+  "Opportunities don't happen. You create them. – Chris Grosser",
   "The way to get started is to quit talking and begin doing. - Walt Disney",
   "The pessimist sees difficulty in every opportunity. The optimist sees opportunity in every difficulty. - Winston Churchill",
   "Don't let yesterday take up too much of today. - Will Rogers",
@@ -137,25 +145,26 @@ const DailyQuote = () => {
   }, []);
 
   return (
-    <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 border border-gray-200">
+    <div className="p-4 h-full flex flex-col">
       <div className="flex items-center gap-2 mb-4">
-        <Quote className="h-5 w-5 text-blue-600" />
-        <h2 className="text-lg font-semibold text-gray-800">Quote of the Day</h2>
+        <Quote className="h-4 w-4 text-blue-600" />
+        <h2 className="text-sm font-semibold text-gray-800">Quote of the Day</h2>
       </div>
 
-      <blockquote className="text-lg text-gray-700 italic leading-relaxed text-center">
-        "{quote}"
-      </blockquote>
+      <div className="flex-1 flex flex-col justify-center">
+        <blockquote className="text-sm text-gray-700 italic leading-relaxed text-center px-2">
+          "{quote}"
+        </blockquote>
 
-      <div className="text-center mt-4 text-sm text-gray-500">
-        {new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
+        <div className="text-center mt-4 text-xs text-gray-500">
+          {new Date().toLocaleDateString('en-US', { 
+            weekday: 'short', 
+            month: 'short', 
+            day: 'numeric' 
+          })}
+        </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
