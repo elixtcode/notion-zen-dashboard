@@ -121,9 +121,12 @@ const FocusTimer = () => {
   };
 
   return (
-    <div className="p-4 grid grid-cols-2 gap-4">
+    <div className="p-4 flex flex-col gap-4 max-w-md mx-auto">
       {timers.map((timer, index) => (
-        <div key={index} className="bg-white p-4 rounded shadow flex flex-col items-center">
+        <div
+          key={index}
+          className="bg-white p-4 rounded shadow flex flex-col items-center"
+        >
           <div className="flex items-center gap-2 mb-2">
             <Timer className="h-4 w-4 text-blue-600" />
             <h2 className="text-sm font-semibold text-gray-800">
@@ -161,7 +164,9 @@ const FocusTimer = () => {
                   <Input
                     type="number"
                     value={timer.seconds}
-                    onChange={(e) => updateSeconds(index, Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
+                    onChange={(e) =>
+                      updateSeconds(index, Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))
+                    }
                     className="w-16 h-8 text-xs"
                     min="0"
                     max="59"
