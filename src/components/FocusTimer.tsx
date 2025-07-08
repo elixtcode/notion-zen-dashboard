@@ -121,72 +121,107 @@ const FocusTimer = () => {
   };
 
   return (
-    <div className="p-2 flex flex-col gap-2 max-w-sm mx-auto">
-      {timers.map((timer, index) => (
-        <div
-          key={index}
-          className="bg-white p-2 rounded shadow flex flex-col items-center"
-        >
-          <div className="flex items-center gap-1 mb-1">
-            <Timer className="h-3 w-3 text-blue-600" />
-            <h2 className="text-xs font-semibold text-gray-800">
-              {index === 0 ? 'Focus (25m)' : 'Break (5m)'}
-            </h2>
-          </div>
-
-          {timer.isAlarmActive ? (
-            <div className="text-center">
-              <div className="text-lg font-bold text-red-600 mb-1">⏰ Time's up!</div>
-              <div className="text-xs text-gray-700 mb-2">
-                Stand up, stretch, and move!
-              </div>
-              <Button onClick={() => stopAlarm(index)} variant="destructive" size="sm" className="text-xs px-2 h-6">
-                <Square className="h-3 w-3 mr-1" /> Stop
-              </Button>
+    <div className="p-3 space-y-3 w-full">
+      <div className="flex flex-col gap-3">
+        {timers.map((timer, index) => (
+          <div
+            key={index}
+            className="bg-white p-3 rounded-xl shadow-sm flex flex-col items-center"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <Timer className="h-4 w-4 text-blue-600" />
+              <h2 className="text-sm font-semibold text-gray-800">
+                {index === 0 ? 'Focus Timer (25 min)' : 'Break Timer (5 min)'}
+              </h2>
             </div>
-          ) : (
-            <>
-              <div className="text-2xl font-mono font-bold text-gray-800 mb-2">
-                {formatTime(timer.timeLeft)}
-              </div>
 
-              {!timer.isRunning && (
-                <div className="flex gap-1 text-xs mb-2">
-                  <Input
-                    type="number"
-                    value={timer.minutes}
-                    onChange={(e) => updateMinutes(index, Math.max(0, parseInt(e.target.value) || 0))}
-                    className="w-14 h-7 text-xs px-2"
-                    min="0"
-                    max="99"
-                    placeholder="min"
-                  />
-                  <Input
-                    type="number"
-                    value={timer.seconds}
-                    onChange={(e) =>
-                      updateSeconds(index, Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))
-                    }
-                    className="w-14 h-7 text-xs px-2"
-                    min="0"
-                    max="59"
-                    placeholder="sec"
-                  />
+            {timer.isAlarmActive ? (
+              <div className="text-center">
+                <div className="text-lg font-bold text-red-600 mb-1">
+                  {index === 0 ? "⏰ Time's up!" : "⏰ Break's over!"}
                 </div>
-              )}
-
-              <div className="flex gap-1">
-                <Button onClick={() => toggleTimer(index)} size="sm" className="text-xs px-2 h-7">
-                  {timer.isRunning ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-                </Button>
-                <Button onClick={() => resetTimer(index)} variant="outline" size="sm" className="text-xs px-2 h-7">
-                  <RotateCcw className="h-3 w-3" />
+                <div className="text-xs text-gray-700 mb-2">
+                  {index === 0
+                    ? "Stand up, stretch, and move!"
+                    : "Go back to work/hustle."}
+                </div>
+                <Button
+                  onClick={() => stopAlarm(index)}
+                  variant="destructive"
+                  size="sm"
+                  className="text-xs px-2 h-6"
+                >
+                  <Square className="h-3 w-3 mr-1" /> Stop
                 </Button>
               </div>
-            </>
-          )}
-        </div>
-      ))}
+            ) : (
+              <>
+                <div className="text-3xl font-mono font-bold text-gray-800 mb-2">
+                  {formatTime(timer.timeLeft)}
+                </div>
+
+                {!timer.isRunning && (
+                  <div className="flex gap-2 text-xs mb-2">
+                    <Input
+                      type="number"
+                      value={timer.minutes}
+                      onChange={(e) =>
+                        updateMinutes(
+                          index,
+                          Math.max(0, parseInt(e.target.value) || 0)
+                        )
+                      }
+                      className="w-16 h-8 text-xs"
+                      min="0"
+                      max="99"
+                      placeholder="min"
+                    />
+                    <Input
+                      type="number"
+                      value={timer.seconds}
+                      onChange={(e) =>
+                        updateSeconds(
+                          index,
+                          Math.max(
+                            0,
+                            Math.min(59, parseInt(e.target.value) || 0)
+                          )
+                        )
+                      }
+                      className="w-16 h-8 text-xs"
+                      min="0"
+                      max="59"
+                      placeholder="sec"
+                    />
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => toggleTimer(index)}
+                    size="sm"
+                    className="text-xs px-2 h-7"
+                  >
+                    {timer.isRunning ? (
+                      <Pause className="h-3 w-3" />
+                    ) : (
+                      <Play className="h-3 w-3" />
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => resetTimer(index)}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs px-2 h-7"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
