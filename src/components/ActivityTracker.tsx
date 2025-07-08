@@ -1,301 +1,124 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Clock, Play, Square, Edit2, Check, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Globe } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface Activity {
+interface Clock {
   id: string;
-  name: string;
-  startTime: Date;
-  endTime?: Date;
-  duration: number;
+  city: string;
+  timezone: string;
 }
 
-interface EditingState {
-  id: string;
-  field: 'name' | 'duration';
-  value: string;
-}
+const WORLD_CITIES = [
+  { city: 'Baker Island', timezone: 'Etc/GMT+12', gmt: 'GMT-12' },
+  { city: 'Honolulu', timezone: 'Pacific/Honolulu', gmt: 'GMT-10 (HST)' },
+  { city: 'Anchorage', timezone: 'America/Anchorage', gmt: 'GMT-9 (AKST)' },
+  { city: 'Los Angeles', timezone: 'America/Los_Angeles', gmt: 'GMT-8 (PST)' },
+  { city: 'Denver', timezone: 'America/Denver', gmt: 'GMT-7 (MST)' },
+  { city: 'Chicago', timezone: 'America/Chicago', gmt: 'GMT-6 (CST)' },
+  { city: 'New York', timezone: 'America/New_York', gmt: 'GMT-5 (EST)' },
+  { city: 'Caracas', timezone: 'America/Caracas', gmt: 'GMT-4' },
+  { city: 'Buenos Aires', timezone: 'America/Argentina/Buenos_Aires', gmt: 'GMT-3' },
+  { city: 'South Georgia', timezone: 'Atlantic/South_Georgia', gmt: 'GMT-2' },
+  { city: 'Azores', timezone: 'Atlantic/Azores', gmt: 'GMT-1' },
+  { city: 'London', timezone: 'Europe/London', gmt: 'GMT+0' },
+  { city: 'Berlin', timezone: 'Europe/Berlin', gmt: 'GMT+1' },
+  { city: 'Cairo', timezone: 'Africa/Cairo', gmt: 'GMT+2' },
+  { city: 'Moscow', timezone: 'Europe/Moscow', gmt: 'GMT+3' },
+  { city: 'Dubai', timezone: 'Asia/Dubai', gmt: 'GMT+4' },
+  { city: 'Karachi', timezone: 'Asia/Karachi', gmt: 'GMT+5' },
+  { city: 'Dhaka', timezone: 'Asia/Dhaka', gmt: 'GMT+6' },
+  { city: 'Bangkok', timezone: 'Asia/Bangkok', gmt: 'GMT+7' },
+  { city: 'Singapore', timezone: 'Asia/Singapore', gmt: 'GMT+8' },
+  { city: 'Manila', timezone: 'Asia/Manila', gmt: 'GMT+8' },
+  { city: 'Tokyo', timezone: 'Asia/Tokyo', gmt: 'GMT+9' },
+  { city: 'Sydney', timezone: 'Australia/Sydney', gmt: 'GMT+10' },
+  { city: 'Noumea', timezone: 'Pacific/Noumea', gmt: 'GMT+11' },
+  { city: 'Auckland', timezone: 'Pacific/Auckland', gmt: 'GMT+12' }
+];
 
-const ActivityTracker = () => {
-  const [activityName, setActivityName] = useState('');
-  const [currentActivity, setCurrentActivity] = useState<Activity | null>(null);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [editing, setEditing] = useState<EditingState | null>(null);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+const WorldClock = () => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [clocks, setClocks] = useState<Clock[]>([
+    { id: '1', city: 'Los Angeles', timezone: 'America/Los_Angeles' },
+    { id: '2', city: 'Manila', timezone: 'Asia/Manila' },
+    { id: '3', city: 'London', timezone: 'Europe/London' },
+  ]);
 
-  // Load from localStorage
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('activities');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setActivities(parsed.map((a: any) => ({
-            ...a,
-            startTime: new Date(a.startTime),
-            endTime: a.endTime ? new Date(a.endTime) : undefined,
-          })));
-        }
-      }
-    } catch (error) {
-      console.error('Failed to parse localStorage data:', error);
-    }
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
   }, []);
 
-  // Save to localStorage
-  useEffect(() => {
-    localStorage.setItem('activities', JSON.stringify(activities));
-  }, [activities]);
-
-  // Track elapsed time
-  useEffect(() => {
-    if (!currentActivity) return;
-
-    const updateElapsed = () => {
-      setElapsedSeconds(Math.floor((Date.now() - currentActivity.startTime.getTime()) / 1000));
-    };
-
-    updateElapsed();
-
-    const interval = setInterval(() => {
-      setElapsedSeconds(prev => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [currentActivity]);
-
-  const startActivity = () => {
-    if (!activityName.trim()) return;
-
-    const newActivity: Activity = {
-      id: Date.now().toString(),
-      name: activityName.trim(),
-      startTime: new Date(),
-      duration: 0,
-    };
-
-    setCurrentActivity(newActivity);
-    setElapsedSeconds(0);
-    setActivityName('');
+  const formatTime = (date: Date, timezone: string) => {
+    return date.toLocaleString('en-US', {
+      timeZone: timezone,
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    });
   };
 
-  const stopActivity = () => {
-    if (!currentActivity) return;
-
-    const endTime = new Date();
-    const durationInSeconds = Math.round(
-      (endTime.getTime() - currentActivity.startTime.getTime()) / 1000
+  const handleCityChange = (clockId: string, newCity: string) => {
+    const cityInfo = WORLD_CITIES.find((c) => c.city === newCity);
+    if (!cityInfo) return;
+    setClocks((prev) =>
+      prev.map((clock) =>
+        clock.id === clockId
+          ? { ...clock, city: cityInfo.city, timezone: cityInfo.timezone }
+          : clock
+      )
     );
-
-    const completedActivity = {
-      ...currentActivity,
-      endTime,
-      duration: durationInSeconds,
-    };
-
-    setActivities(prev => [completedActivity, ...prev]);
-    setCurrentActivity(null);
-    setElapsedSeconds(0);
   };
 
-  const formatDuration = (seconds: number) => {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = Math.floor(seconds % 60);
-
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
-
-  const parseDuration = (timeString: string): number => {
-    const parts = timeString.split(':').map(p => p.trim());
-    if (parts.length !== 3) return 0;
-
-    const [h, m, s] = parts.map(part => parseInt(part, 10));
-    if ([h, m, s].some(n => isNaN(n) || n < 0)) return 0;
-
-    return h * 3600 + m * 60 + s;
-  };
-
-  const totalDuration = useMemo(() => {
-    return activities.reduce((sum, activity) => sum + activity.duration, 0);
-  }, [activities]);
-
-  const getTotalTime = () => formatDuration(totalDuration);
-
-  const startEditing = (id: string, field: 'name' | 'duration', currentValue: string) => {
-    setEditing({ id, field, value: currentValue });
-  };
-
-  const cancelEditing = () => setEditing(null);
-
-  const saveEdit = () => {
-    if (!editing) return;
-
-    setActivities(prev =>
-      prev.map(activity => {
-        if (activity.id === editing.id) {
-          if (editing.field === 'name') {
-            return { ...activity, name: editing.value.trim() || activity.name };
-          } else if (editing.field === 'duration') {
-            const newDuration = parseDuration(editing.value);
-            return {
-              ...activity,
-              duration: newDuration > 0 ? newDuration : activity.duration,
-            };
-          }
-        }
-        return activity;
-      })
-    );
-
-    setEditing(null);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') saveEdit();
-    else if (e.key === 'Escape') cancelEditing();
+  const getCityInfo = (city: string) => {
+    return WORLD_CITIES.find((c) => c.city === city) || WORLD_CITIES[0];
   };
 
   return (
-    <div className="p-4 h-full flex flex-col">
-      <div className="flex items-center gap-2 mb-4">
-        <Clock className="h-4 w-4 text-green-600" />
-        <h2 className="text-sm font-semibold text-gray-800">Activity Tracker</h2>
+    <div className="p-3 h-full flex flex-col">
+      <div className="flex items-center gap-2 mb-3">
+        <Globe className="h-4 w-4 text-purple-600" />
+        <h2 className="text-sm font-semibold text-gray-800">World Clock</h2>
       </div>
 
-      <div className="space-y-3 mb-4">
-        <Input
-          placeholder="Activity name"
-          value={activityName}
-          onChange={(e) => setActivityName(e.target.value)}
-          disabled={!!currentActivity}
-          className="text-xs h-8"
-        />
+      <div className="flex flex-col gap-1 h-full justify-start">
+        {clocks.map((clock) => {
+          const cityInfo = getCityInfo(clock.city);
+          const time = formatTime(currentTime, clock.timezone);
 
-        <div className="flex gap-2">
-          <Button
-            onClick={startActivity}
-            disabled={!activityName.trim() || !!currentActivity}
-            className="flex-1 text-xs h-8"
-            size="sm"
-          >
-            <Play className="h-3 w-3 mr-1" />
-            Start
-          </Button>
-
-          <Button
-            onClick={stopActivity}
-            disabled={!currentActivity}
-            variant="destructive"
-            className="flex-1 text-xs h-8"
-            size="sm"
-          >
-            <Square className="h-3 w-3 mr-1" />
-            Stop
-          </Button>
-        </div>
-
-        {currentActivity && (
-          <div className="bg-green-50 p-3 rounded text-xs space-y-1">
-            <div className="font-medium text-green-800">{currentActivity.name}</div>
-            <div className="text-green-600">
-              Started at {currentActivity.startTime.toLocaleTimeString()}
-            </div>
-            <div className="text-green-800 font-mono">
-              ⏱ Elapsed: {formatDuration(elapsedSeconds)}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex-1 overflow-y-auto">
-        {activities.length > 0 && (
-          <div className="mb-3 text-center">
-            <div className="text-xs font-semibold text-gray-800 bg-gray-100 px-2 py-1 rounded">
-              Total Time Logged: {getTotalTime()}
-            </div>
-          </div>
-        )}
-
-        <div className="space-y-2">
-          {activities.length === 0 ? (
-            <div className="text-xs text-gray-500 text-center py-4">No activities logged yet</div>
-          ) : (
-            <div className="space-y-1">
-              <div className="grid grid-cols-2 gap-2 text-xs font-medium text-gray-600 border-b pb-1">
-                <div>Activity</div>
-                <div className="text-right">Duration</div>
+          return (
+            <div
+              key={clock.id}
+              className="bg-gradient-to-r from-blue-50 to-purple-50 rounded border p-2 flex flex-col justify-center"
+              style={{ minHeight: '68px' }}
+            >
+              <Select
+                value={clock.city}
+                onValueChange={(value) => handleCityChange(clock.id, value)}
+              >
+                <SelectTrigger className="w-full mb-1 border rounded text-xs font-medium text-gray-700">
+                  <SelectValue placeholder="Select city" />
+                </SelectTrigger>
+                <SelectContent>
+                  {WORLD_CITIES.map((city) => (
+                    <SelectItem key={city.city} value={city.city}>
+                      {`${city.gmt} – ${city.city}`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="text-center">
+                <div className="text-sm font-mono font-bold text-gray-800">{time}</div>
               </div>
-
-              {activities.slice(0, 8).map((activity) => (
-                <div key={activity.id} className="grid grid-cols-2 gap-2 text-xs py-1 border-b border-gray-100">
-                  {/* Activity Name */}
-                  <div className="flex items-center">
-                    {editing?.id === activity.id && editing.field === 'name' ? (
-                      <div className="flex items-center gap-1 flex-1">
-                        <Input
-                          value={editing.value}
-                          onChange={(e) => setEditing({ ...editing, value: e.target.value })}
-                          onKeyDown={handleKeyPress}
-                          className="text-xs h-6 px-1"
-                          autoFocus
-                        />
-                        <Button onClick={saveEdit} size="sm" className="h-6 w-6 p-0">
-                          <Check className="h-3 w-3" />
-                        </Button>
-                        <Button onClick={cancelEditing} size="sm" variant="outline" className="h-6 w-6 p-0">
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div
-                        className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded flex-1"
-                        onClick={() => startEditing(activity.id, 'name', activity.name)}
-                      >
-                        <span className="font-medium text-gray-800 truncate">{activity.name}</span>
-                        <Edit2 className="h-3 w-3 text-gray-400" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Duration */}
-                  <div className="flex items-center justify-end">
-                    {editing?.id === activity.id && editing.field === 'duration' ? (
-                      <div className="flex items-center gap-1">
-                        <Input
-                          value={editing.value}
-                          onChange={(e) => setEditing({ ...editing, value: e.target.value })}
-                          onKeyDown={handleKeyPress}
-                          className="text-xs h-6 px-1 w-20 text-right font-mono"
-                          placeholder="HH:MM:SS"
-                          autoFocus
-                        />
-                        <Button onClick={saveEdit} size="sm" className="h-6 w-6 p-0">
-                          <Check className="h-3 w-3" />
-                        </Button>
-                        <Button onClick={cancelEditing} size="sm" variant="outline" className="h-6 w-6 p-0">
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div
-                        className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded"
-                        onClick={() => startEditing(activity.id, 'duration', formatDuration(activity.duration))}
-                      >
-                        <span className="text-gray-600 font-mono">{formatDuration(activity.duration)}</span>
-                        <Edit2 className="h-3 w-3 text-gray-400" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
             </div>
-          )}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
 };
 
-export default ActivityTracker;
+export default WorldClock;
