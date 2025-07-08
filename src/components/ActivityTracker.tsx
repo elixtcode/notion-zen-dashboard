@@ -189,57 +189,57 @@ const ActivityTracker = () => {
                 <div className="text-right col-span-2">Duration</div>
               </div>
               {activities.slice(0, visibleCount).map((activity) => (
-                <div key={activity.id} className="grid grid-cols-3 gap-2 text-xs py-1 border-b border-gray-100">
+                <div key={activity.id} className="grid grid-cols-3 gap-2 text-xs py-2 border-b border-gray-100">
                   <div className="flex items-center">
-                    {editing?.id === activity.id && editing.field === 'name' ? (
-                      <div className="flex items-center gap-1 flex-1">
+                    {editing && editing.id === activity.id && editing.field === 'name' ? (
+                      <div className="flex flex-wrap items-center gap-2 flex-1">
                         <Input
                           value={editing.value}
                           onChange={(e) => setEditing({ ...editing, value: e.target.value })}
                           onKeyDown={handleKeyPress}
-                          className="text-xs h-6 px-1"
+                          className="text-xs h-8 px-2 w-full"
                           autoFocus
                         />
-                        <Button onClick={saveEdit} size="sm" className="h-6 w-6 p-0">
-                          <Check className="h-3 w-3" />
+                        <Button onClick={saveEdit} size="sm" className="h-8 w-8 p-0">
+                          <Check className="h-4 w-4" />
                         </Button>
-                        <Button onClick={cancelEditing} size="sm" variant="outline" className="h-6 w-6 p-0">
-                          <X className="h-3 w-3" />
+                        <Button onClick={cancelEditing} size="sm" variant="outline" className="h-8 w-8 p-0">
+                          <X className="h-4 w-4" />
                         </Button>
                       </div>
                     ) : (
-                      <div onClick={() => startEditing(activity.id, 'name', activity.name)} className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded flex-1">
+                      <div onClick={() => startEditing(activity.id, 'name', activity.name)} className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-2 rounded flex-1">
                         <span className="font-medium text-gray-800 truncate">{activity.name}</span>
                         <Edit2 className="h-3 w-3 text-gray-400" />
                       </div>
                     )}
                   </div>
 
-                  <div className="col-span-2 flex items-center justify-end gap-1">
-                    {editing?.id === activity.id && editing.field === 'duration' ? (
+                  <div className="col-span-2 flex items-center justify-end gap-2">
+                    {editing && editing.id === activity.id && editing.field === 'duration' ? (
                       <>
                         <Input
                           value={editing.value}
                           onChange={(e) => setEditing({ ...editing, value: e.target.value })}
                           onKeyDown={handleKeyPress}
-                          className="text-xs h-6 px-1 w-20 text-right font-mono"
+                          className="text-xs h-8 px-2 w-24 text-right font-mono"
                           placeholder="HH:MM:SS"
                           autoFocus
                         />
-                        <Button onClick={saveEdit} size="sm" className="h-6 w-6 p-0">
-                          <Check className="h-3 w-3" />
+                        <Button onClick={saveEdit} size="sm" className="h-8 w-8 p-0">
+                          <Check className="h-4 w-4" />
                         </Button>
-                        <Button onClick={cancelEditing} size="sm" variant="outline" className="h-6 w-6 p-0">
-                          <X className="h-3 w-3" />
+                        <Button onClick={cancelEditing} size="sm" variant="outline" className="h-8 w-8 p-0">
+                          <X className="h-4 w-4" />
                         </Button>
                       </>
                     ) : (
                       <>
-                        <div onClick={() => startEditing(activity.id, 'duration', formatDuration(activity.duration))} className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                        <div onClick={() => startEditing(activity.id, 'duration', formatDuration(activity.duration))} className="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-2 rounded">
                           <span className="text-gray-600 font-mono">{formatDuration(activity.duration)}</span>
                           <Edit2 className="h-3 w-3 text-gray-400" />
                         </div>
-                        <Button onClick={() => deleteActivity(activity.id)} size="sm" variant="outline" className="h-6 px-1 text-xs">
+                        <Button onClick={() => deleteActivity(activity.id)} size="sm" variant="outline" className="h-6 px-2 text-xs">
                           ✕
                         </Button>
                       </>
