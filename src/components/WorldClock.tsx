@@ -9,18 +9,18 @@ interface Clock {
 }
 
 const WORLD_CITIES = [
-  { city: 'Los Angeles', timezone: 'America/Los_Angeles', utc: 'UTC-8' },
-  { city: 'New York', timezone: 'America/New_York', utc: 'UTC-5' },
-  { city: 'London', timezone: 'Europe/London', utc: 'UTC+0' },
-  { city: 'Berlin', timezone: 'Europe/Berlin', utc: 'UTC+1' },
-  { city: 'Paris', timezone: 'Europe/Paris', utc: 'UTC+1' },
-  { city: 'Moscow', timezone: 'Europe/Moscow', utc: 'UTC+3' },
-  { city: 'Dubai', timezone: 'Asia/Dubai', utc: 'UTC+4' },
-  { city: 'Singapore', timezone: 'Asia/Singapore', utc: 'UTC+8' },
-  { city: 'Manila', timezone: 'Asia/Manila', utc: 'UTC+8' },
-  { city: 'Beijing', timezone: 'Asia/Shanghai', utc: 'UTC+8' },
-  { city: 'Tokyo', timezone: 'Asia/Tokyo', utc: 'UTC+9' },
-  { city: 'Sydney', timezone: 'Australia/Sydney', utc: 'UTC+11' },
+  { city: 'Los Angeles', timezone: 'America/Los_Angeles', gmt: 'GMT-8' },
+  { city: 'New York', timezone: 'America/New_York', gmt: 'GMT-5' },
+  { city: 'London', timezone: 'Europe/London', gmt: 'GMT+0' },
+  { city: 'Berlin', timezone: 'Europe/Berlin', gmt: 'GMT+1' },
+  { city: 'Paris', timezone: 'Europe/Paris', gmt: 'GMT+1' },
+  { city: 'Moscow', timezone: 'Europe/Moscow', gmt: 'GMT+3' },
+  { city: 'Dubai', timezone: 'Asia/Dubai', gmt: 'GMT+4' },
+  { city: 'Singapore', timezone: 'Asia/Singapore', gmt: 'GMT+8' },
+  { city: 'Manila', timezone: 'Asia/Manila', gmt: 'GMT+8' },
+  { city: 'Beijing', timezone: 'Asia/Shanghai', gmt: 'GMT+8' },
+  { city: 'Tokyo', timezone: 'Asia/Tokyo', gmt: 'GMT+9' },
+  { city: 'Sydney', timezone: 'Australia/Sydney', gmt: 'GMT+11' },
 ];
 
 const WorldClock = () => {
@@ -71,7 +71,7 @@ const WorldClock = () => {
         <h2 className="text-sm font-semibold text-gray-800">World Clock</h2>
       </div>
 
-      <div className="flex flex-col gap-2 h-full justify-start">
+      <div className="flex flex-col gap-1 h-full justify-start">
         {clocks.map((clock) => {
           const cityInfo = getCityInfo(clock.city);
           const time = formatTime(currentTime, clock.timezone);
@@ -92,14 +92,13 @@ const WorldClock = () => {
                 <SelectContent>
                   {WORLD_CITIES.map((city) => (
                     <SelectItem key={city.city} value={city.city}>
-                      {`${city.utc} – ${city.city}`}
+                      {`${city.gmt} – ${city.city}`}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <div className="text-center">
-                <div className="text-sm font-mono font-bold text-gray-800">{time}</div>
-                <div className="text-xs text-gray-500">{cityInfo.utc}</div>
+                <div className="text-sm font-mono font-bold text-gray-800">{time} <span className="text-xs text-gray-500">({cityInfo.gmt})</span></div>
               </div>
             </div>
           );
