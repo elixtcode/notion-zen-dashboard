@@ -1,3 +1,39 @@
+# Project: Notion Zen Dashboard
+
+This is a web app built using modern tools like **React**, **TypeScript**, and **Tailwind CSS**, scaffolded and iteratively developed using the **Lovable AI assistant** to streamline frontend setup and styling. The goal is to build an embeddable dashboard for Notion that tracks personal productivity metrics (e.g., focus time, time spent per task) in a visually appealing and responsive layout.
+
+While Lovable was used to assist with initial scaffolding and prompting, all code was reviewed, customized, and extended manually using my own logic and design decisions.
+
+### 🔗 Live URL
+[https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659b767ddc](https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659b767ddc)
+
+## Features I Added / Customized
+- Implemented basic time tracker to log time spent on each task
+- Custom form validation with React Hook Form
+- Dynamic theming via Tailwind and shadcn/ui
+- Custom state handling with useState and useEffect
+- Published live using Lovable-hosted URL for easy Notion embedding
+  
+## What I Learned
+Through this project, I strengthened my understanding of:
+- Structuring and styling React apps with modern UI frameworks
+- Managing dynamic form data and component state
+- Applying prompt-driven development with AI-assisted tools
+- Deploying web apps with rapid iteration and visual testing
+
+## Project Highlights & Learnings
+- Set up project using Lovable.dev and Vite
+- Customized layout with Tailwind CSS and shadcn/ui
+- Built and validated forms using React Hook Form
+- Handled dynamic state with useState/useEffect
+- Learned prompt-driven workflows with Lovable
+- Deployed the dashboard with Notion embed support
+  
+## About Lovable
+Lovable is a frontend AI assistant that helps scaffold React apps. I used it to generate boilerplate and speed up layout setup. All logic, design, and final code decisions were my own.
+
+<details>
+-------------------------------------------------------------------------------------------------------------------------------------------------
 # Welcome to your Lovable project
 
 ## Project info
@@ -66,8 +102,11 @@ Simply open [Lovable](https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659
 
 ## Can I connect a custom domain to my Lovable project?
 
-Yes, you can!
+Yes, you can! 
+</details>
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+
