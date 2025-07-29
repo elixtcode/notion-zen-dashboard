@@ -33,7 +33,7 @@ Through this project, I strengthened my understanding of:
 Lovable is a frontend AI assistant that helps scaffold React apps. I used it to generate boilerplate and speed up layout setup. All logic, design, and final code decisions were my own.
 
 <details>
--------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Welcome to your Lovable project
 
 ## Project info
