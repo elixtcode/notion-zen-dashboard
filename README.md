@@ -5,7 +5,7 @@ This is a web app built using modern tools like **React**, **TypeScript**, and *
 While Lovable was used to assist with initial scaffolding and prompting, all code was reviewed, customized, and extended manually using my own logic and design decisions.
 
 ### 🔗 Live URL
-[https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659b767ddc](https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659b767ddc)
+[[https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659b767ddc](https://notion-zen-dashboard.lovable.app/)]([https://lovable.dev/projects/9706c1c5-398c-4184-bf44-f1659b767ddc](https://notion-zen-dashboard.lovable.app/))
 
 ## Features I Added / Customized
 - Implemented basic time tracker to log time spent on each task
