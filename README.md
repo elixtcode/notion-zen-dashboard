@@ -1,8 +1,8 @@
 # Project: Notion Zen Dashboard
 
-This is a mobile-friendly web app built with React, TypeScript, and Tailwind CSS, designed to embed seamlessly in Notion. I used an AI-assisted tool to generate the initial layout scaffold to speed up development, but all core components, logic, and styling were designed, written, and refined manually through GitHub.
+A minimalist, mobile-friendly web app built with React, TypeScript, and Tailwind CSS, designed to embed seamlessly in Notion. It helps track focus time, break durations, and task-based productivity in a single clean interface.
 
-The goal is to track personal productivity metrics such as focus time and time spent per task through a clean, responsive interface. Through this project, I applied key concepts in React and TypeScript, including state management, component logic, and type-safe development practices.
+I used an AI-generated layout as a starting point to save time, then customized the timer behavior, added key features, and refined the interface to suit my workflow all coded and versioned through GitHub.
 
 ### Live Demo  
 https://notion-zen-dashboard.lovable.app/
@@ -10,19 +10,17 @@ https://notion-zen-dashboard.lovable.app/
 ---
 
 ## Features & Key Learnings
-
-- Built a timer-based tracker using `setInterval`, `useState`, and `useEffect` to monitor task durations in real time  
-- Created and validated forms using **React Hook Form**, including error handling and dynamic field control  
-- Customized responsive UI with **Tailwind CSS** and **shadcn/ui** components  
-- Managed dynamic state and conditional UI rendering using core React hooks  
+- Built dual timers using createTimer function for better reusability
+- Ensured each timer runs independently with no interference
+- Added sound alarms that auto-stop (no infinite noise)
+- Built with **Tailwind CSS** and **shadcn/ui** for a clean, accessible layout.
 - Designed and deployed the dashboard with full **Notion embed compatibility**  
-- Strengthened my understanding of modern frontend architectures and type-safe development workflows  
 
 ---
 
 ## About the Setup
 
-To accelerate initial layout setup, I used an AI-assisted tool (Lovable) to scaffold the basic file structure and layout components. From there, I manually implemented all logic, component behavior, and custom design—coding directly in GitHub using a modular, maintainable structure with full version control.
+To accelerate initial layout setup, I used an AI-assisted tool (Lovable) to scaffold the basic file structure and layout components. But I customized the app beyond the initial scaffold to make it fully usable inside Notion and make it mobile-friendly.
 
 ---
 
