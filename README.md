@@ -2,7 +2,7 @@
 
 This is a mobile-friendly web app built with React, TypeScript, and Tailwind CSS, designed to embed seamlessly in Notion. I used an AI-assisted tool to generate the initial layout scaffold to speed up development, but all core components, logic, and styling were designed, written, and refined manually through GitHub.
 
-The goal is to track personal productivity metrics—such as focus time and time spent per task—through a clean, responsive interface. Through this project, I applied key concepts in React and TypeScript, including state management, component logic, and type-safe development practices.
+The goal is to track personal productivity metrics such as focus time and time spent per task through a clean, responsive interface. Through this project, I applied key concepts in React and TypeScript, including state management, component logic, and type-safe development practices.
 
 ### 🔗 Live Demo  
 https://notion-zen-dashboard.lovable.app/
