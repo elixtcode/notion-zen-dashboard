@@ -4,7 +4,7 @@ This is a mobile-friendly web app built with React, TypeScript, and Tailwind CSS
 
 The goal is to track personal productivity metrics such as focus time and time spent per task through a clean, responsive interface. Through this project, I applied key concepts in React and TypeScript, including state management, component logic, and type-safe development practices.
 
-### 🔗 Live Demo  
+### Live Demo  
 https://notion-zen-dashboard.lovable.app/
 
 ---
