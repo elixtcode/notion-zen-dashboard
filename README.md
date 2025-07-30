@@ -2,7 +2,7 @@
 
 A minimalist, mobile-friendly web app built with React, TypeScript, and Tailwind CSS, designed to embed seamlessly in Notion. It helps track focus time, break durations, and task-based productivity in a single clean interface.
 
-I used an AI-generated layout as a starting point to save time, then customized the timer behavior, added key features, and refined the interface to suit my workflow all coded and versioned through GitHub.
+I used an AI-generated layout as a starting point to save time, then customized the timer behavior, added key features, and refined the interface to suit my workflow all coded through GitHub.
 
 ### Live Demo  
 https://notion-zen-dashboard.lovable.app/
