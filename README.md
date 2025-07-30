@@ -1,8 +1,8 @@
 # Project: Notion Zen Dashboard
 
-This is a web app built using modern tools like **React**, **TypeScript**, and **Tailwind CSS**, scaffolded and iteratively developed using the **Lovable AI assistant** to streamline frontend setup and styling. The goal is to build an embeddable dashboard for Notion that tracks personal productivity metrics (e.g., focus time, time spent per task) in a visually appealing and responsive layout.
+This is a mobile-friendly web app built using modern tools like React, TypeScript, and Tailwind CSS. The initial scaffolding was assisted by AI-assisted tools to speed up the setup and styling process, but all components, logic, and refinements were developed, reviewed, and customized directly in GitHub using my own design and implementation decisions.
 
-While Lovable was used to assist with initial scaffolding and prompting, all code was reviewed, customized, and extended manually using my own logic and design decisions.
+The goal is to build an embeddable dashboard for Notion that tracks personal productivity metrics—such as focus time and time spent per task—in a clean, responsive, and visually engaging layout. This project demonstrates my ability to build real-world frontend applications with a type-safe, component-based architecture.
 
 ### 🔗 Live URL
 https://notion-zen-dashboard.lovable.app/
@@ -12,25 +12,26 @@ https://notion-zen-dashboard.lovable.app/
 - Custom form validation with React Hook Form
 - Dynamic theming via Tailwind and shadcn/ui
 - Custom state handling with useState and useEffect
-- Published live using Lovable-hosted URL for easy Notion embedding
+- Published live using Lovable-hosted URL
+- Designed for Notion Embeds
   
 ## What I Learned
 Through this project, I strengthened my understanding of:
 - Structuring and styling React apps with modern UI frameworks
 - Managing dynamic form data and component state
-- Applying prompt-driven development with AI-assisted tools
+- Experimented using AI-assisted tools for rapid UI scaffolding
 - Deploying web apps with rapid iteration and visual testing
 
 ## Project Highlights & Learnings
-- Set up project using Lovable.dev and Vite
+- Scaffolded the project using Vite an an AI-assisted layout starter
 - Customized layout with Tailwind CSS and shadcn/ui
 - Built and validated forms using React Hook Form
 - Handled dynamic state with useState/useEffect
-- Learned prompt-driven workflows with Lovable
+- Explored prompt-driven workflows to accelerate early prototyping
 - Deployed the dashboard with Notion embed support
   
-## About Lovable
-Lovable is a frontend AI assistant that helps scaffold React apps. I used it to generate boilerplate and speed up layout setup. All logic, design, and final code decisions were my own.
+## About the Setup
+To accelerate early layout work, I used an AI-assisted tool for frontend assistance—to scaffold the initial boilerplate. From there, I manually built out all logic, UI components, and styling decisions to match the project’s goals and design.
 
 <details>
 
