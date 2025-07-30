@@ -1,4 +1,4 @@
-# 📊 Project: Notion Zen Dashboard
+# Project: Notion Zen Dashboard
 
 This is a mobile-friendly web app built with React, TypeScript, and Tailwind CSS, designed to embed seamlessly in Notion. I used an AI-assisted tool to generate the initial layout scaffold to speed up development, but all core components, logic, and styling were designed, written, and refined manually through GitHub.
 
@@ -9,7 +9,7 @@ https://notion-zen-dashboard.lovable.app/
 
 ---
 
-## ✅ Features & Key Learnings
+## Features & Key Learnings
 
 - Built a timer-based tracker using `setInterval`, `useState`, and `useEffect` to monitor task durations in real time  
 - Created and validated forms using **React Hook Form**, including error handling and dynamic field control  
@@ -20,7 +20,7 @@ https://notion-zen-dashboard.lovable.app/
 
 ---
 
-## 🛠 About the Setup
+## About the Setup
 
 To accelerate initial layout setup, I used an AI-assisted tool (Lovable) to scaffold the basic file structure and layout components. From there, I manually implemented all logic, component behavior, and custom design—coding directly in GitHub using a modular, maintainable structure with full version control.
 
