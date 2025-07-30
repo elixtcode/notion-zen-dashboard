@@ -24,7 +24,7 @@ https://notion-zen-dashboard.lovable.app/
 
 To accelerate initial layout setup, I used an AI-assisted tool (Lovable) to scaffold the basic file structure and layout components. From there, I manually implemented all logic, component behavior, and custom design—coding directly in GitHub using a modular, maintainable structure with full version control.
 
-> 💡 Note: This README is designed to be transparent for academic evaluation as part of my probationary status in the UPOU Diploma in Computer Science program.
+> 💡 Note: This README is designed for academic evaluation as part of the goal of lifting my probationary status in the UPOU Diploma in Computer Science program.
 
 ---
 
