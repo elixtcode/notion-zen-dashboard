@@ -171,7 +171,7 @@ const FocusTimer = () => {
                           Math.max(0, parseInt(e.target.value) || 0)
                         )
                       }
-                      className="w-14 md:w-16 h-8 text-xs"
+                      className="w-14 md:w-16 h-8 text-xs bg-white border-gray-300 text-gray-900"
                       min="0"
                       max="99"
                       placeholder="min"
@@ -188,7 +188,7 @@ const FocusTimer = () => {
                           )
                         )
                       }
-                      className="w-14 md:w-16 h-8 text-xs"
+                      className="w-14 md:w-16 h-8 text-xs bg-white border-gray-300 text-gray-900"
                       min="0"
                       max="59"
                       placeholder="sec"

@@ -174,7 +174,7 @@ const ActivityTracker = () => {
           value={activityName}
           onChange={(e) => setActivityName(e.target.value)}
           disabled={!!currentActivity}
-          className="text-xs h-10 sm:h-8"
+          className="text-xs h-10 sm:h-8 bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
         />
 
         <div className="flex flex-col sm:flex-row gap-2">
@@ -243,7 +243,7 @@ const ActivityTracker = () => {
                             )
                           }
                           onKeyDown={handleKeyPress}
-                          className="text-xs h-7"
+                          className="text-xs h-7 bg-white border-gray-300 text-gray-900"
                           autoFocus
                         />
                       ) : (
@@ -267,7 +267,7 @@ const ActivityTracker = () => {
                             )
                           }
                           onKeyDown={handleKeyPress}
-                          className="text-xs h-7"
+                          className="text-xs h-7 bg-white border-gray-300 text-gray-900"
                           autoFocus
                         />
                       ) : (

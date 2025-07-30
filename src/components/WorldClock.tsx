@@ -99,12 +99,16 @@ const WorldClock = () => {
                 value={clock.city}
                 onValueChange={(value) => handleCityChange(clock.id, value)}
               >
-                <SelectTrigger className="w-full mb-1 border rounded text-xs font-medium text-gray-700">
+                <SelectTrigger className="w-full mb-1 bg-white border border-gray-300 rounded text-xs font-medium text-gray-700 hover:bg-gray-50">
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg">
                   {WORLD_CITIES.map((city) => (
-                    <SelectItem key={city.city} value={city.city}>
+                    <SelectItem 
+                      key={city.city} 
+                      value={city.city}
+                      className="hover:bg-gray-100 focus:bg-gray-100 text-gray-700"
+                    >
                       {`${city.gmt} – ${city.city}`}
                     </SelectItem>
                   ))}
